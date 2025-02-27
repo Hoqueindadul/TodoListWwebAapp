@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Pacifico&family=Playwrite+VN:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@1,100&display=swap');
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    background-color: #111827;
+    align-items: center;
+    font-family: inter;
+}
+
+
+/* Login page desing start */
+
+.login {
+    display: flex;
+    flex-wrap: wrap; 
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    max-width: 70%; 
+    margin: auto;
+    background: rgba(77, 75, 75, 0.2); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Form Section */
+.form {
+    flex: 1;
+    min-width: 300px; /* Minimum width for small devices */
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+form input {
+    width: 100%;
+    padding: 18px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 17px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+form button:hover {
+    background: #0056b3;
+}
+form p{
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #f0f1f1;
+    text-decoration: none;
+    display: flex;
+    justify-content: end;  
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+
+form .signupLink{
+    padding: 0 2px;
+    color: #007bff;
+}
+form a:hover {
+    text-decoration: underline;
+}
+.formContainer{
+    width: 400px;
+    height: 500px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-right: 23px;
+}
+/* Image Section */
+.image {
+    flex: 1;
+    min-width: 300px; /* Minimum width for the image */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+.image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers its section */
+    align-items: center;
+    border-radius: 8px;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+    .login {
+        flex-direction: column; /* Stack form and image vertically */
+    }
+
+    .image,
+    .form {
+        min-width: 100%; /* Make each section full width */
+    }
+}
+
+
+/* Login page desing end */
+
+/* SignUp page desing start */
+
+/* Signup Container */
+.signup {
+    display: flex;
+    flex-wrap: wrap; 
+    flex-direction: row-reverse; 
+    justify-content: center;
+    align-items: center;
+    max-width: 70%; 
+    margin: auto;
+    background: rgba(77, 75, 75, 0.2); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.loginLink{
+    padding: 0 2px;
+    color: #007bff;
+}
+
+
+form a:hover {
+    text-decoration: underline;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+    .signup {
+        flex-direction: column-reverse; /* Stack image and form vertically */
+    }
+
+    .image,
+    .formContainer {
+        flex: none; /* Remove equal space on smaller screens */
+        width: 100%; /* Make each section full width */
+    }
+}
+
+/* SignUp page desing end */
+
+/* Todo body desong start */
+
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: wheat;
+    z-index: -1;
+
+}
+.container h1{
+    font-size: 2.5rem;
+    background-image: linear-gradient(to right, yellow, orange, red, magenta, violet, blue);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+
+}
+.fa-plus{
+    font-size: 3rem;
+    box-shadow: rgba(139, 103, 2, 0.35) 0px 5px 15px;
+    border-radius: 100%;
+    background-color: #0b101a;
+    padding: 4px 6px;
+    color: orange;
+    cursor: pointer;
+} 
+
+a{
+    color: rgb(214, 214, 221);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 4px 0;
+}
+
+#todos{
+    
+    border-radius: 10px;
+    margin: 2rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+/* Popup styles */
+#popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+
+#popupForm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #111827;
+    color: orange;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+    width: 300px;
+}
+
+
+.close-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    float: right;
+}
+.saveTodoBtn{
+    background-color: rgb(150, 118, 30);
+    color: black;
+    font-weight: bold;
+}
+.saveTodoBtn:hover{
+    background-color: orange;
+}
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #374151;
+    color: #ccc;
+}
+
+textarea {
+    resize: none;
+}
+.goBackBtn{
+    position: absolute;
+    top: 4rem;
+    left: 7rem;
+    right: 4rem;
+    width: 5rem;
+}
+.todo-item {
+    background-color: #374151;
+    color: white;
+    padding: 15px;
+    margin: 10px 8px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 45vh;
+}
+.todo-item h3 {
+    margin: 0 0 10px 0;
+}
+#items{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+
+}
+
+
+/* Todo body desong end */

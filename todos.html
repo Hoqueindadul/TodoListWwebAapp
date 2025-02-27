@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+
+    <div class="todoMaincontent">
+        <!-- Navbar Start-->
+        <div class="navBar">
+            <div class="logo">
+                <a href="./index.html"><h1>ToDo</h1></a>
+            </div>
+
+            <div class="socialIcon">
+                <i class="fa-brands fa-github"></i>
+                <i class="fa-brands fa-linkedin"></i>
+            </div>
+
+            <div id="profile">
+                <div class="dropdown hiddendrop" id="profileDropdown">
+                    <ul>
+                        <li><a href="#">View Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#" id="logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar End-->
+
+        <!-- Todo Section -->
+        <div class="container">
+            <h1>Now Create Your Todos</h1>
+            <div class="buttons">
+                <i class="fa-solid fa-plus" id="createTodo"></i>
+            </div>
+
+            <div id="todos">
+                <div id="items"></div>
+            </div>
+        </div>
+
+        <!-- Todo Creation Popup -->
+        <div id="popupOverlay"></div>
+        <div id="popupForm">
+            <button class="close-btn" id="closePopup">X</button>
+            <h2>Create a Todo</h2>
+            <form id="todoForm">
+                <label for="todoTitle">Todo Title</label>
+                <input type="text" id="todoTitle" placeholder="Enter title" required>
+                <label for="todoDescription">Description</label>
+                <textarea id="todoDescription" rows="4" placeholder="Enter description" required></textarea>
+                <button type="submit" class="saveTodoBtn">Save Todo</button>
+            </form>
+        </div>
+
+        
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./todos.js"></script>
+    <script src="./index.js"></script>
+</body>
+</html>

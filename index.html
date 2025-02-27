@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+</head>
+
+<body>
+    <!-- Navbar Start-->
+    <div class="navBar">
+        <div class="logo">
+            <a href="./index.html"><h1>ToDo</h1></a>
+        </div>
+
+        <div class="socialIcon">
+            <i class="fa-brands fa-github"></i>
+            <i class="fa-brands fa-linkedin"></i>
+        </div>
+
+        <div id="profile">
+            <div class="dropdown hiddendrop" id="profileDropdown">
+                <ul>
+                    <li><a href="#">View Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#" id="logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!-- Navbar End-->
+
+    <div class="container">
+        <div class="hero">
+            <h1>Stay Organized</h1>
+            <p>Boost productivity by managing your tasks efficiently. Start now!</p>
+            <a href="#" class="btn" id="createTodoBtn">Create Your To-Do</a>
+        </div>
+        <div class="image">
+            <img src="./images/todoImage.jpg" alt="">
+        </div>
+    </div>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>

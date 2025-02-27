@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body>
+    <div class="login">
+        <div class="form">
+            <div class="image">
+                <img src="./images/40350255_8810413.jpg" alt="">
+            </div>
+            <div class="formContainer">
+                <form id="loginForm">
+                    <input type="email" name="email" id="loginEmail" placeholder="Enter your email" required>
+                    <input type="password" name="password" id="loginPassword" placeholder="Enter your password" required>
+                    <button type="submit" id="loginBtn">Login</button>
+                    <p>Don't have an account? <a href="./signup.html" class="signupLink">Signup</a> </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Toastify.js -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        // Ensure Toastify is loaded
+if (typeof Toastify === "undefined") {
+    console.error("Toastify is not loaded. Please check the script URL.");
+}
+
+const loginForm = document.getElementById("loginForm");
+
+const showToastForSuccess = () => {
+    console.log("Displaying success toast.");
+    Toastify({
+        text: "Logged In successfully!",
+        duration: 3000, // Increased duration for visibility
+        gravity: "top",
+        position: "right",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    }).showToast();
+}
+
+const showToastForError = () => {
+    console.log("Displaying error toast.");
+    Toastify({
+        text: "Wrong Information Provided.",
+        duration: 3000, // Increased duration for visibility
+        gravity: "top",
+        position: "right",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+    }).showToast();
+}
+
+loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const userDetails = JSON.parse(localStorage.getItem("userDetails")) || [];
+
+    const isUser = userDetails.find(user => user.email === email && user.password === password);
+
+    if (isUser) {
+        // Set login state to true
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("loggedInUserEmail", email);
+        showToastForSuccess();
+        setTimeout(() => {
+            window.location.href = "index.html"; // Redirect to the main page
+        }, 2000); // Wait for the toast to show
+    } else {
+        showToastForError();
+    }
+});
+    </script>
+</body>
+
+</html>

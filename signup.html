@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body>
+    <div class="signup">
+        <div class="form">
+            <div class="image">
+                <img src="./images/40350255_8810413.jpg" alt="">
+            </div>
+            <div class="formContainer">
+                <form id="signupForm">
+                    <input type="text" name="name" id="name" placeholder="Enter your name" required>
+                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                    <button type="submit" id="signupBtn">Sign Up</button>
+                    <p>Already have an account? <a href="./login.html" class="loginLink">Login</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        const signupForm = document.getElementById("signupForm");
+
+
+const showToastForSuccess = () => {
+    Toastify({
+        text: "Signup successfull!",
+        duration: 1000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    }).showToast();
+}
+const showToastForError = () => {
+    Toastify({
+        text: "Wrong Information Provided.",
+        duration: 1000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    }).showToast();
+}
+
+
+signupForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const userData = JSON.parse(localStorage.getItem("userDetails")) || [];
+    userData.push({
+        'name': name,
+        'email': email,
+        'password': password
+    });
+
+    localStorage.setItem("userDetails", JSON.stringify(userData));
+    showToastForSuccess
+
+    signupForm.reset();
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 2000)
+    // Redirect to the main page
+});
+    </script>
+</body>
+
+</html>

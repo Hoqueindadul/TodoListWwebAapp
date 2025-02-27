@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Subtasks</title>
+    <link rel="stylesheet" href="subtask.css">
+</head>
+
+<body>
+    <!-- Subtask Popup -->
+    <div id="subtaskContainer">
+        <div class="subtaskContent">
+            <div class="backBtn">
+                <a href="/todos.html"><button id="goBack">Back</button></a>
+            </div>
+            <h2>Manage Subtasks</h2>
+            <div id="createSubtask">
+                <button>Add Subtask</button>
+            </div>
+
+            <!-- Subtask Form -->
+            <div class="subtaskForm" style="display: none;">
+                <form id="subtaskForm">
+                    <input type="text" id="subtaskTitle" placeholder="Enter Subtask" required />
+                    <input type="date" id="startDate" required />
+                    <input type="time" id="startTime" required />
+                    <input type="date" id="endDate" required />
+                    <input type="time" id="endTime" required />
+                    <button type="submit">Add</button>
+                    <button type="button" id="cancelSubtask">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Subtask List -->
+            <div id="subtaskList"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentEditingSubtask = null;
+            const loggedInUserEmail = localStorage.getItem("loggedInUserEmail");
+            const currentTodoTitle = localStorage.getItem("currentTodoTitle");
+
+            if (!loggedInUserEmail || !currentTodoTitle) {
+                alert("No associated Todo found!");
+                window.location.href = "index.html";
+            }
+
+            const subtaskFormContainer = document.querySelector('.subtaskForm');
+            const subtaskForm = document.getElementById('subtaskForm');
+            const subtaskTitleInput = document.getElementById('subtaskTitle');
+            const startDateInput = document.getElementById('startDate');
+            const startTimeInput = document.getElementById('startTime');
+            const endDateInput = document.getElementById('endDate');
+            const endTimeInput = document.getElementById('endTime');
+            const subtaskList = document.getElementById('subtaskList');
+            const createSubtaskBtn = document.getElementById('createSubtask');
+            const cancelSubtaskBtn = document.getElementById('cancelSubtask');
+
+            // Load subtasks from localStorage
+            const loadSubtasks = () => {
+                const allSubtasks = JSON.parse(localStorage.getItem('subtasks')) || {};
+                return allSubtasks[loggedInUserEmail]?.[currentTodoTitle] || [];
+            };
+
+            // Save subtasks to localStorage
+            const saveSubtasks = (subtasks) => {
+                let allSubtasks = JSON.parse(localStorage.getItem('subtasks')) || {};
+                if (!allSubtasks[loggedInUserEmail]) allSubtasks[loggedInUserEmail] = {};
+                allSubtasks[loggedInUserEmail][currentTodoTitle] = subtasks;
+                localStorage.setItem('subtasks', JSON.stringify(allSubtasks));
+            };
+
+            // Render subtasks list
+            const renderSubtasks = () => {
+                subtaskList.innerHTML = '';
+                const subtasks = loadSubtasks();
+
+                if (subtasks.length === 0) {
+                    subtaskList.innerHTML = "<p>No subtasks added yet.</p>";
+                    return;
+                }
+
+                subtasks.forEach((subtask, index) => {
+                    const subtaskItem = createSubtaskElement(subtask, index);
+                    subtaskList.appendChild(subtaskItem);
+                    updateCountdown(subtaskItem, subtask, index);
+                });
+            };
+
+            // Create subtask element
+            function createSubtaskElement(subtask, index) {
+                const subtaskItem = document.createElement('div');
+                subtaskItem.className = 'subtask-item';
+                if (subtask.completed) {
+                    subtaskItem.classList.add('completed');
+                }
+
+                subtaskItem.innerHTML = `
+            <input type="checkbox" ${subtask.completed ? "checked" : ""}>
+            <div class="subtask-info">
+                <div class="subtask-title">${subtask.title}</div>
+                <div class="subtask-dates">${subtask.startDate} ${subtask.startTime} - ${subtask.endDate} ${subtask.endTime}</div>
+                <div class="countdown" data-index="${index}"></div>
+            </div>
+            <div class="subtask-actions">
+                <button class="btn-edit">Edit</button>
+                <button class="btn-delete">Delete</button>
+            </div>
+        `;
+
+                const checkbox = subtaskItem.querySelector('input[type="checkbox"]');
+                checkbox.addEventListener('change', () => {
+                    let subtasks = loadSubtasks();
+                    subtasks[index].completed = checkbox.checked;
+                    saveSubtasks(subtasks);
+                    subtaskItem.classList.toggle('completed', checkbox.checked);
+                });
+
+                subtaskItem.querySelector('.btn-delete').addEventListener('click', () => {
+                    let subtasks = loadSubtasks();
+                    subtasks.splice(index, 1);
+                    saveSubtasks(subtasks);
+                    renderSubtasks();
+                });
+
+                subtaskItem.querySelector('.btn-edit').addEventListener('click', () => {
+                    currentEditingSubtask = index;
+                    subtaskTitleInput.value = subtask.title;
+                    startDateInput.value = subtask.startDate;
+                    startTimeInput.value = subtask.startTime;
+                    endDateInput.value = subtask.endDate;
+                    endTimeInput.value = subtask.endTime;
+                    subtaskFormContainer.style.display = 'block';
+                });
+
+                return subtaskItem;
+            }
+
+            // Countdown Timer
+            function updateCountdown(subtaskItem, subtask, index) {
+                const countdownElement = subtaskItem.querySelector('.countdown');
+                const checkbox = subtaskItem.querySelector('input[type="checkbox"]');
+                const now = new Date().getTime();
+                const startDateTime = new Date(`${subtask.startDate}T${subtask.startTime}`).getTime();
+                const endDateTime = new Date(`${subtask.endDate}T${subtask.endTime}`).getTime();
+
+                function updateDisplay(timeLeft, message) {
+                    if (timeLeft <= 0) {
+                        countdownElement.textContent = message;
+                        return true;
+                    } else {
+                        countdownElement.textContent = `${message} ${formatTime(timeLeft)}`;
+                        return false;
+                    }
+                }
+
+                if (subtask.completed) {
+                    countdownElement.textContent = "Subtask completed!";
+                    return;
+                }
+
+                if (now < startDateTime) {
+                    // Countdown to start
+                    const timeLeft = startDateTime - now;
+                    if (updateDisplay(timeLeft, "Starts in:")) return;
+                    setTimeout(() => updateCountdown(subtaskItem, subtask, index), 1000);
+                } else if (now < endDateTime) {
+                    // Countdown to end
+                    const timeLeft = endDateTime - now;
+                    if (updateDisplay(timeLeft, "Ends in:")) return;
+                    setTimeout(() => updateCountdown(subtaskItem, subtask, index), 1000);
+                } else {
+                    // Mark subtask as complete
+                    let subtasks = loadSubtasks();
+                    if (!subtasks[index].completed) {
+                        subtasks[index].completed = true;
+                        saveSubtasks(subtasks);
+                        checkbox.checked = true;
+                        subtaskItem.classList.add('completed');
+                    }
+                    countdownElement.textContent = "Subtask completed!";
+                }
+            }
+
+            function formatTime(duration) {
+                let seconds = Math.floor((duration / 1000) % 60),
+                    minutes = Math.floor((duration / (1000 * 60)) % 60),
+                    hours = Math.floor((duration / (1000 * 60 * 60)) % 24),
+                    days = Math.floor(duration / (1000 * 60 * 60 * 24));
+
+                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            createSubtaskBtn.addEventListener('click', () => {
+                currentEditingSubtask = null;
+                subtaskForm.reset();
+                subtaskFormContainer.style.display = 'block';
+            });
+
+            cancelSubtaskBtn.addEventListener('click', () => {
+                subtaskFormContainer.style.display = 'none';
+            });
+
+            subtaskForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let subtasks = loadSubtasks();
+                let newSubtask = {
+                    title: subtaskTitleInput.value.trim(),
+                    startDate: startDateInput.value,
+                    startTime: startTimeInput.value,
+                    endDate: endDateInput.value,
+                    endTime: endTimeInput.value,
+                    completed: false
+                };
+                if (currentEditingSubtask !== null) {
+                    subtasks[currentEditingSubtask] = newSubtask;
+                    currentEditingSubtask = null;
+                } else {
+                    subtasks.push(newSubtask);
+                }
+                saveSubtasks(subtasks);
+                subtaskForm.reset();
+                subtaskFormContainer.style.display = 'none';
+                renderSubtasks();
+            });
+
+            renderSubtasks();
+        });
+
+    </script>
+
+</body>
+
+</html>
