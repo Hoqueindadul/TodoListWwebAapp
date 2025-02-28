@@ -3,6 +3,7 @@ document.getElementById('profile').addEventListener('click', function () {
     const dropdown = document.getElementById('profileDropdown');
     dropdown.classList.toggle('show'); // Toggle the 'show' class to display/hide the dropdown
 });
+
 document.addEventListener('click', function (event) {
     const dropdown = document.getElementById('profileDropdown');
     const profile = document.getElementById('profile');
@@ -12,24 +13,35 @@ document.addEventListener('click', function (event) {
     }
 });
 
-
 // Redirect based on login status
 document.getElementById("createTodoBtn").addEventListener("click", function (e) {
     e.preventDefault(); // Prevent default anchor behavior
 
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Check if stored value is "true"
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Check if user is logged in
 
     if (isLoggedIn) {
         window.location.href = "todos.html";
     } else {
         setTimeout(() => {
-        window.location.href = "login.html"
-    }, 1000)
+            window.location.href = "login.html";
+        }, 1000);
     }
 });
 
-// Logout functionality
-document.getElementById("logout").addEventListener("click", () => {
-    localStorage.setItem("isLoggedIn", "false"); // Correctly update localStorage
-    window.location.href = "login.html"; // Redirect after logout
+// Update auth link based on login status
+document.addEventListener('DOMContentLoaded', function () {
+    const authLink = document.getElementById('authLink');
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; 
+
+    if (isLoggedIn) {
+        authLink.textContent = 'Logout';
+        authLink.href = '#'; 
+        authLink.addEventListener("click", () => {
+            localStorage.setItem("isLoggedIn", "false"); 
+            window.location.href = "login.html"; 
+        });
+    } else {
+        authLink.textContent = 'Login';
+        authLink.href = 'login.html';
+    }
 });

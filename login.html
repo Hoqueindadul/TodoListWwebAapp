@@ -6,16 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
     <div class="login">
+        
         <div class="form">
-            <div class="image">
-                <img src="./images/40350255_8810413.jpg" alt="">
-            </div>
+            
             <div class="formContainer">
+                <span id="goToHome"><i class="fa-solid fa-chevron-left"></i>Back To Home</span>
                 <form id="loginForm">
                     <input type="email" name="email" id="loginEmail" placeholder="Enter your email" required>
                     <input type="password" name="password" id="loginPassword" placeholder="Enter your password" required>
@@ -36,6 +37,10 @@ if (typeof Toastify === "undefined") {
 }
 
 const loginForm = document.getElementById("loginForm");
+const goToHome = document.getElementById("goToHome");
+goToHome.addEventListener("click", () => {
+    window.location.href = "index.html";
+});
 
 const showToastForSuccess = () => {
     console.log("Displaying success toast.");
