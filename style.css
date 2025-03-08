@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Pacifico&family=Playwrite+VN:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@1,100&display=swap');
 
-body{
+html, body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -214,7 +214,7 @@ form a:hover {
 
 /* SignUp page desing end */
 
-/* Todo body desong start */
+/* Todo body design start */
 
 
 .container{
@@ -224,7 +224,22 @@ form a:hover {
     align-items: center;
     color: wheat;
     z-index: -1;
+    max-width: 100%;
+    overflow-x: hidden;
 
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+    #todos {
+        flex-direction: column;
+        margin: 1rem;
+    }
+    .todo-item {
+        width: 100%;
+    }
 }
 .container h1{
     font-size: 2.5rem;
@@ -253,13 +268,32 @@ a{
 }
 
 #todos{
-    
     border-radius: 10px;
     margin: 2rem;
     padding: 1rem;
     display: flex;
     flex-direction: row;
     
+}
+.todo-actions{
+    display: flex;
+}
+.editButton{
+    padding: 5px;
+    border-radius: 8px;
+    background-color: orange;
+    border: none;
+    margin-left: 4px;
+    font-weight: bold;
+}
+.gotoSubTaskButton{
+    padding: 5px;
+    border-radius: 8px;
+    background-color: orange;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0 0 0 auto; 
 }
 
 /* Popup styles */

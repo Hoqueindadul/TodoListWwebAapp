@@ -5,14 +5,30 @@ const closePopupButton = document.getElementById("closePopup");
 const todoForm = document.getElementById("todoForm");
 const todosDiv = document.getElementById("items");
 
+const todoTitleInput = document.getElementById("todoTitle");
+const todoDescriptionInput = document.getElementById("todoDescription");
+
+let isEditing = false;
+let editIndex = null;
+
 // Ensure todos are always an array
-const loadTodos = () => JSON.parse(localStorage.getItem('todos')) || [];
+const loadTodos = () => {
+    const todos = localStorage.getItem('todos');
+    try {
+        return Array.isArray(JSON.parse(todos)) ? JSON.parse(todos) : [];
+    } catch (error) {
+        return [];
+    }
+};
+
 const saveTodos = (todos) => localStorage.setItem('todos', JSON.stringify(todos));
 const loggedInUserEmail = localStorage.getItem("loggedInUserEmail");
 
 // Show Todo Popup
 if (createTodoButton) {
     createTodoButton.addEventListener('click', () => {
+        isEditing = false;  // Reset editing state
+        todoForm.reset();
         popupForm.style.display = 'block';
         popupOverlay.style.display = 'block';
     });
@@ -22,6 +38,8 @@ if (createTodoButton) {
 const closePopup = () => {
     popupForm.style.display = 'none';
     popupOverlay.style.display = 'none';
+    isEditing = false;
+    editIndex = null;
 };
 
 if (closePopupButton) closePopupButton.addEventListener('click', closePopup);
@@ -55,6 +73,24 @@ const deleteTodo = (index) => {
     }
 };
 
+// Edit Todo
+const editTodo = (index) => {
+    const todos = loadTodos();
+    const userTodos = todos.filter(todo => todo.userEmail === loggedInUserEmail);
+    const todoToEdit = userTodos[index];
+
+    if (!todoToEdit) return;
+
+    isEditing = true;
+    editIndex = index;
+
+    todoTitleInput.value = todoToEdit.title;
+    todoDescriptionInput.value = todoToEdit.description;
+
+    popupForm.style.display = 'block';
+    popupOverlay.style.display = 'block';
+};
+
 // Display Todos
 const showAllTodos = () => {
     todosDiv.innerHTML = '';
@@ -79,59 +115,83 @@ const displayTodo = (todo, index) => {
         <h3>${todo.title}</h3>
         <p>${todo.description}</p>
         <p>${todo.time}</p>
-        <button class="deleteButton" data-index="${index}">Delete</button>
-        <button class="gotoSubTaskButton" data-index="${index}">Go To Subtask</button>
+        <div class="todo-actions">
+            <button class="deleteButton" data-index="${index}">Delete</button>
+            <button class="editButton" data-index="${index}">Edit</button>
+            <button class="gotoSubTaskButton" data-index="${index}">Go To Subtask</button>
+        </div>
     `;
     
     todosDiv.appendChild(todoItem);
-    const gotoSubTaskBtn = todoItem.querySelector(".gotoSubTaskButton")
-    gotoSubTaskBtn.style.padding = '6px'
-    gotoSubTaskBtn.style.borderRadius = '8px'
-    gotoSubTaskBtn.style.backgroundColor = 'orange'
-    gotoSubTaskBtn.style.border = 'none'
-    gotoSubTaskBtn.style.cursor = 'pointer'
-    gotoSubTaskBtn.style.fontWeight = 'bold'
-    gotoSubTaskBtn.style.marginLeft = "8rem"
+
+    const gotoSubTaskBtn = todoItem.querySelector(".gotoSubTaskButton");
     gotoSubTaskBtn.addEventListener('click', () => {
-        localStorage.setItem("currentTodoTitle", todo.title); // Save todo title
+        localStorage.setItem("currentTodoTitle", todo.title);
         window.location.href = "subtask.html";
     });
-    
-    const deleteTodoBtn = todoItem.querySelector('.deleteButton')
-    deleteTodoBtn.style.padding = '6px'
-    deleteTodoBtn.style.borderRadius = '8px'
-    deleteTodoBtn.style.backgroundColor = 'orange'
-    deleteTodoBtn.style.border = 'none'
-    deleteTodoBtn.style.cursor = 'pointer'
-    deleteTodoBtn.style.fontWeight = 'bold'
-    todoItem.querySelector('.deleteButton').addEventListener('click', () => deleteTodo(index));
+
+    const deleteTodoBtn = todoItem.querySelector('.deleteButton');
+    deleteTodoBtn.style.cssText = `
+        padding: 6px;
+        border-radius: 8px;
+        background-color: orange;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    `;
+    deleteTodoBtn.addEventListener('click', () => deleteTodo(index));
+
+    const editTodoBtn = todoItem.querySelector('.editButton');
+    editTodoBtn.addEventListener('click', () => editTodo(index));
 };
 
-// Add new Todo
+// Add or Edit Todo
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const title = document.getElementById('todoTitle').value;
-    const description = document.getElementById('todoDescription').value;
+    const title = todoTitleInput.value.trim();
+    const description = todoDescriptionInput.value.trim();
 
-    const now = new Date();
-    const time = now.toLocaleString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-    });
+    if (!title || !description) {
+        showToast("Title and description cannot be empty!");
+        return;
+    }
 
     const todos = loadTodos();
-    const todo = { title, description, time, userEmail: loggedInUserEmail };
 
-    todos.push(todo);
-    saveTodos(todos);
+    if (isEditing && editIndex !== null) {
+        // Editing existing todo
+        const userTodos = todos.filter(todo => todo.userEmail === loggedInUserEmail);
+        const todoToEdit = userTodos[editIndex];
+
+        if (!todoToEdit) return;
+
+        const actualIndex = todos.findIndex(todo => todo.title === todoToEdit.title && todo.userEmail === loggedInUserEmail);
+        if (actualIndex > -1) {
+            todos[actualIndex].title = title;
+            todos[actualIndex].description = description;
+            saveTodos(todos);
+            showToast("Todo updated successfully!");
+        }
+    } else {
+        // Adding new todo
+        const now = new Date();
+        const time = now.toLocaleString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+        const todo = { title, description, time, userEmail: loggedInUserEmail };
+        todos.push(todo);
+        saveTodos(todos);
+        showToast("Todo created successfully!");
+    }
+
     showAllTodos();
-    showToast("Todo created successfully!");
-
     todoForm.reset();
     closePopup();
 });

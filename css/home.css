@@ -195,7 +195,7 @@ body{
 
 
 /* Hero section start */
-.container {
+.todoConatiner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -327,7 +327,7 @@ body{
 
 /* 🔹 Responsive Adjustments */
 @media (max-width: 1024px) {
-    .container {
+    .todoConatiner {
         flex-direction: column; /* Stack elements vertically */
         text-align: center; /* Center align text */
     }
